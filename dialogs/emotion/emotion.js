@@ -1,6 +1,6 @@
 window.onload = function () {
     editor.setOpt({
-        emotionLocalization:false
+        emotionLocalization: true
     });
 
     emotion.SmileyPath = editor.options.emotionLocalization === true ? 'images/' : "http://img.baidu.com/hi/";
@@ -14,14 +14,14 @@ window.onload = function () {
 function initImgName() {
     for ( var pro in emotion.SmilmgName ) {
         var tempName = emotion.SmilmgName[pro],
-                tempBox = emotion.SmileyBox[pro],
-                tempStr = "";
+				tempBox = emotion.SmileyBox[pro],
+				tempStr = "";
 
         if ( tempBox.length ) return;
         for ( var i = 1; i <= tempName[1]; i++ ) {
             tempStr = tempName[0];
             if ( i < 10 ) tempStr = tempStr + '0';
-            tempStr = tempStr + i + '.gif';
+            tempStr = tempStr + i + (tempName[2] || '.gif');
             tempBox.push( tempStr );
         }
     }
@@ -89,8 +89,8 @@ function autoHeight( index ) {
             parent.style.height = "232px";
             break;
         case 2:
-            iframe.style.height = "260px";
-            parent.style.height = "272px";
+            iframe.style.height = "470px";
+            parent.style.height = "482px";
             break;
         case 3:
             iframe.style.height = "300px";
@@ -107,6 +107,10 @@ function autoHeight( index ) {
         case 6:
             iframe.style.height = "230px";
             parent.style.height = "242px";
+            break;
+        case 7:
+            iframe.style.height = "260px";
+            parent.style.height = "272px";
             break;
         default:
 
@@ -137,10 +141,16 @@ function createTab( tabName ) {
                 posflag = j < positionLine ? 0 : 1;
                 offset = cssOffset * i * (-1) - 1;
                 infor = emotion.SmileyInfor[tabName][i];
-
+					 if(/qq|emoji/i.test(emotion.imageCss[tabName])){
+						 offset += 'px top';
+					 }
+					 else{
+						 offset = 'left ' + offset + 'px';
+					 }
+					 
                 textHTML.push( '<td  class="' + tableCss + '"   border="1" width="' + iColWidth + '%" style="border-collapse:collapse;" align="center"  bgcolor="transparent" onclick="InsertSmiley(\'' + realUrl.replace( /'/g, "\\'" ) + '\',event)" onmouseover="over(this,\'' + sUrl + '\',\'' + posflag + '\')" onmouseout="out(this)">' );
                 textHTML.push( '<span>' );
-                textHTML.push( '<img  style="background-position:left ' + offset + 'px;" title="' + infor + '" src="' + emotion.SmileyPath + (editor.options.emotionLocalization ? '0.gif" width="' : 'default/0.gif" width="') + iWidth + '" height="' + iHeight + '"></img>' );
+                textHTML.push( '<img  style="background-position:' + offset + ';" title="' + infor + '" src="' + emotion.SmileyPath + (editor.options.emotionLocalization ? '0.gif" width="' : 'default/0.gif" width="') + iWidth + '" height="' + iHeight + '"></img>' );
                 textHTML.push( '</span>' );
             } else {
                 textHTML.push( '<td width="' + iColWidth + '%"   bgcolor="#FFFFFF">' );
